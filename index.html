@@ -3,32 +3,644 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Name</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Chuxiong Wu</title>
+  <meta name="description" content="Academic homepage of Chuxiong Wu — Systems Security, CPS, and AI Security." />
+  <link rel="icon" href="favicon.ico" />
   <style>
-    body{max-width:860px;margin:40px auto;font:16px/1.6 system-ui}
-    header h1{margin:0}
-    nav a{margin-right:14px}
+    /* === Theme & layout === */
+    :root{
+      --brand:#6c0633;    /* header background */
+      --accent:#d2a416;   /* link highlight */
+      --ocean:#005370;
+      --oyster:#e0ddd7;
+      --sand:#ede5da;
+      --grey:#353334;
+      --brown:#7d5a3e;
+      --text:#171717;
+      --muted:#e0ddd7;
+      --max: 980px;
+      --nav-h: 60px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth; scroll-padding-top: var(--nav-h)}
+    body{margin:0; color:var(--text); font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:var(--ocean); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max); margin:0 auto; padding:16px 20px}
+
+    /* === Top nav === */
+    .site-nav{position:sticky; top:0; z-index:20; background:var(--brand); color:white; min-height:var(--nav-h); border-bottom:2px solid #6c0633}
+    .site-nav .bar{display:flex; align-items:center; justify-content:space-between; padding-inline: 20px;}
+    .brand{display:flex; gap:10px; align-items:center}
+    .brand a{color:var(--accent); font-weight:700; letter-spacing:.2px; font-size: 20px; line-height: 1.2;}
+    .menu{display:flex; gap:14px}
+    .menu a{color:var(--accent); padding:0px; font-size: 16px; line-height: 1.2;}
+    .menu a:hover{opacity:.9}
+    .menu-btn{
+      display:none; background:transparent; border:0; color:#fff; font-size:28px; line-height:1;
+    }
+
+    #homeBtn {
+      cursor: pointer;         /* show hand cursor */
+    }
+
+    /* mobile menu */
+    @media (max-width: 760px){
+      .menu-btn{display:block}
+      .menu{
+        position:fixed; inset:var(--nav-h) 0 auto 0;
+        background:var(--brand); display:none; flex-direction:column; padding:12px 20px; border-bottom:2px solid #6c0633
+      }
+      body.nav-open .menu{display:flex}
+    }
+
+    /* === Location === */
+    .office {
+      display: grid;
+      margin-top: 6px;
+      font-size: 16px;
+      grid-template-columns: auto 1fr; /* first column = label, second = content */
+      gap: 6px;
+      margin: 0;
+    }
+
+    /* === Email === */
+    .email {
+      display: grid;
+      grid-template-columns: auto 1fr; /* first column = label, second = content */
+      gap: 6px;
+      margin: 0;
+    }
+    .email b {
+      white-space: nowrap;
+    }
+    .email span {
+      display: block;
+    }
+
+    /* === News block (template-style) === */
+    .news-box {
+      max-height: 240px;            /* was 250px */
+      overflow: auto;               /* scroll when long */
+      padding: 12px 16px;
+      border-top: 4px solid var(--accent);
+      border-bottom: 4px solid var(--accent);
+      border-left: 0;
+      border-right: 0;
+      background: transparent;      /* stays on your page bg */
+    }
+
+    .news-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .news-list li {
+      display: grid;
+      grid-template-columns: 80px 1fr;  /* fixed column for date, flexible column for text */
+      gap: 10px;
+      margin: 6px 0;
+    }
+
+    .news-list time {
+      font-family: monospace;
+      font-variant-numeric: tabular-nums;
+      /* color: var(--muted); */
+      margin-right: 8px;
+      /* white-space: nowrap; */
+      text-align: left;
+    }
+
+    /* === Header (intro) === */
+    header .grid{display:grid; grid-template-columns: auto 1fr; gap:28px}
+    @media (max-width: 960px){ header .grid{grid-template-columns: 1fr} }
+    .photo{width:100%; max-width:200px; border-radius:8px; display:block; margin-top:24px;}
+    .muted{color:var(--muted)}
+    h1{margin:0 0 6px; font-size:28px}
+    h2{margin:44px 0 12px; color: var(--brand); font-size:20px; border-bottom:4px solid var(--sand); padding-bottom:6px}
+
+    .position-block {
+      margin-top: 20px;
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--text);
+    }
+
+    .position-block .name {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 10px 0 6px;
+    }
+
+    .position-block .label {
+      font-weight: 700;       /* Only the label (Office:, Email:) is bold */
+    }
+
+    .position-block .office,
+    .position-block .email {
+      margin: 16px 0;
+      font-weight: 400;       /* Reset normal text */
+    }
+
+
+
+
+    /* === Main sections === */
+    .pubs{padding-left:18px}
+    .pubs li{margin:10px 0}
+    .conf{font-weight:600}
+    .year{color:var(--muted); margin-left:6px}
+    .links a{margin-right:10px}
+    
+    /* === Publications table === */
+    .publication-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+
+    .publication-table td {
+      padding: 10px;
+      vertical-align: top;
+    }
+
+    .publication-table .confyear {
+      width: 120px;
+      font-weight: normal;
+      /* color: var(--brown); */
+      white-space: nowrap;
+      padding-right: 16px;
+    }
+
+    /* === Teaching === */
+    .teaching-block {
+      margin-bottom: 20px;
+      /* padding: 12px 16px;
+      border-left: 4px solid var(--accent); */
+      /* background: #f9f9f9; */
+    }
+
+    .teaching-block h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      padding: 10px;
+      /* color: var(--brand); */
+    }
+
+    .teaching-block .university {
+      font-weight: 600;
+      margin-left: 24px;
+      margin-top: 10px;
+    }
+
+    .teaching-block .course {
+      margin-left: 36px;
+      margin-top: 4px;
+    }
+
+    .teaching-block .course strong {
+      display: block;
+      margin-bottom: 2px;
+      /* color: var(--brand); */
+    }
+
+    .teaching-block .terms {
+      margin: 0;
+      padding-left: 24px;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    /* === Services (mirrors Teaching blocks) === */
+    .service-block {
+      margin-bottom: 20px;
+      /* padding: 12px 16px;
+      border-left: 4px solid var(--accent);
+      background: #f9f9f9; */
+    }
+
+    .service-block h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      padding: 10px;
+      /* color: var(--brand); */
+    }
+
+    .service-list {
+      margin: 6px 0 0;
+      padding-left: 36px;
+    }
+
+    .service-list li { margin: 4px 0; }
+
+    /* optional: compact into two columns on wider screens */
+    /* @media (min-width: 900px) {
+      .service-list.cols-2 {
+        columns: 2;
+        column-gap: 24px;
+      }
+      .service-list.cols-2 li {
+        break-inside: avoid;
+      }
+    } */
+
+    /* === Footer === */
+    footer{border-top:1px solid #eee; color:var(--muted)}
+    .small{font-size:13px}
+
+    /* Two-column layout: text left, side (photo+position) right */
+    .aboutgrid{
+      display:grid;
+      grid-template-columns: minmax(0,1fr) 440px; /* left flexible, right fixed */
+      column-gap:28px;
+      row-gap:10px;
+      /* margin-bottom: 0px; */
+      grid-template-areas:
+        "about-left side"
+        "about-full about-full";   /* full-width row below */
+      align-items:start;
+    }
+
+    /* map the areas */
+    .about-left  { grid-area: about-left; }
+    .about-full  { grid-area: about-full; }
+    .about-full :last-child { margin-bottom: 0; }
+    .side        { grid-area: side; }
+
+    /* side: photo + position side-by-side */
+    .sidegrid{
+      display:grid;
+      grid-template-columns: 220px 1fr; /* photo | position */
+      gap:16px;
+      align-items:start;
+    }
+    .photo{
+      width:200px; height:auto; border-radius:8px; display:block;
+    }
+
+    /* tidy text */
+    .about-left p{ margin-top: 20px; text-align:left; margin-bottom: 0px;}
+    .about-full p{ margin-top: 0px; text-align:left; margin-bottom: 0px;}
+
+    .about-points {
+      margin: 8px 0 0;
+      padding-left: 20px;   /* standard list indent */
+    }
+    .about-points li {
+      margin: 6px 0;
+    }
+
+    /* mobile stack */
+    @media (max-width: 960px){
+      .aboutgrid{
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "side"
+          "about-left"
+          "about-full";
+      }
+      .sidegrid{ grid-template-columns: 1fr; }
+      .photo{ width:100%; max-width:320px; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Your Name</h1>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/cv.pdf">CV</a>
-      <a href="/publications/">Publications</a>
-      <a href="/teaching/">Teaching</a>
-    </nav>
-  </header>
-  <main>
+  <!-- Accessible, original nav (no libs) -->
+  <nav class="site-nav" aria-label="Primary">
+    <div class="wrap bar">
+      <div class="brand">
+        <a id="homeBtn" aria-label="Go to top">Chuxiong</a>
+      </div>
+      <button id="menuButton" class="menu-btn" aria-controls="menu" aria-expanded="false" aria-label="Toggle menu">☰</button>
+      <div id="menu" class="menu" role="menu">
+        <a href="#about">Home</a>
+        <a href="#publications">Publications</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#services">Services</a>
+        <!-- <a role="menuitem" href="cv.pdf">CV</a> -->
+      </div>
+    </div>
+  </nav>
+
+  <section id="about" class="wrap">
     <h2>About</h2>
-    <p>Assistant Professor, Southern Illinois University. Research: CPS & AI security.</p>
-    <h2>News</h2>
-    <ul>
-      <li>Aug 2025 – Starting at SIU 🎉</li>
-    </ul>
-  </main>
-  <footer><small>© Your Name</small></footer>
+
+    <div class="aboutgrid">
+
+      <!-- Left of photo: first part of your About text -->
+      <article class="about-left">
+        <p>
+          I am a Tenure-Track Assistant Professor in the
+          <a href="https://soc.siu.edu">School of Computing</a> at
+          <a href="https://siu.edu">Southern Illinois University</a>. 
+          I received my Ph.D. in Computer Science from the <a href="http://www.cs.gmu.edu/">Computer Science Department</a> at 
+          <a href="https://www.gmu.edu">George Mason University</a>, 
+          advised by <a href="https://cs.gmu.edu/~zeng/">Dr. Qiang Zeng</a>.
+          I hold an M.S. in Computer Science from the <a href="https://sc.edu">University of South Carolina</a> 
+          and a B.E. in Electronic Information Engineering from <a href="https://ev.buaa.edu.cn">Beihang University</a>.
+        </p>
+        <p>I am broadly interested in <b>Systems Security</b>, with a focus on cyber-physical systems (CPS) and artificial intelligence (AI) systems.</p>
+
+      </article>
+
+      <!-- Right column: photo + position -->
+      <aside class="side">
+        <div class="sidegrid">
+          <img src="img/photo.jpg" alt="Portrait of Chuxiong Wu" class="photo" />
+          <div class="position-block">
+            <p class="name">Chuxiong Wu, Ph.D.</p>
+            <div class="position">
+              <div class="title">Assistant Professor</div>
+              <div>School of Computing</div>
+              <div>Southern Illinois University</div>
+              <div>Carbondale, IL, USA</div>
+              <p class="office"><span class="label">Office:</span> ASA | C0103A</p>
+              <p class="email"><span class="label">Email:</span> chuxiong[dot]wu<br>[at]siu[dot]edu</p>
+            </div>
+            
+          </div>
+        </div>
+      </aside>
+
+      <!-- Full-width continuation of About text -->
+      <article class="about-full">
+        <ul class="about-points">
+          <li><b>CPS security:</b> Authentication and pairing, smart sensing, Internet of Things (IoT), mobile payment security.</li>
+          <li><b>AI Security:</b> Adversarial attacks and defenses, watermarking and content attribution, data privacy and security.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+    <main class="wrap">
+      <section id="news">
+        <h2>News</h2>
+        <div class="news-box">
+          <ul class="news-list">
+            <!-- <li><time datetime="2024-08">Aug 2024</time> Presented a paper at USENIX Security’24.</li> -->
+            <li><time datetime="2025-08">2025-08</time> Joined Southern Illinois University as an Assistant Professor.</li>
+            <li><time datetime="2025-08">2025-08</time> Successfully defended my Ph.D. dissertation.</li>
+            <li><time datetime="2025-05">2025-05</time> Named a Notable Reviewer for ICLR'25.</li>
+            <li><time datetime="2025-05">2025-05</time> Paper on multi-bit and stealthy LLM watermarking accepted to ICML'25.</li>
+            <li><time datetime="2024-10">2024-10</time> Served on the local organization team for ISC'24.</li>
+            <li><time datetime="2024-07">2024-07</time> Passed dissertation proposal defense.</li>
+            <li><time datetime="2024-04">2024-04</time> Paper on QR code payment security accepted to USENIX Security'24.</li>
+            <li><time datetime="2024-04">2024-04</time> Served on the CCS'24 Artifact Evaluation Committee.</li>
+            <li><time datetime="2024-03">2024-03</time> Paper on drone-noise authentication accepted to IEEE TMC.</li>
+            <li><time datetime="2023-11">2023-11</time> Gave a talk at University of Wisconsin-Eau Claire.</li>
+            <li><time datetime="2023-11">2023-11</time> Passed the comprehensive exam.</li>
+            <li><time datetime="2023-06">2023-06</time> Paper on NLP-inspired binary analysis accepted to USENIX Security'23.</li>
+            <li><time datetime="2022-08">2022-08</time> Earned M.S. in Computer Science, University of South Carolina.</li>
+            <li><time datetime="2022-07">2022-07</time> Paper on everyday-object authentication accepted to UbiComp'22.</li>
+            <li><time datetime="2022-06">2022-06</time> Paper on drone authentication through a smile is accepted to MobiCom'22.</li>
+            <li><time datetime="2022-03">2022-03</time> First secure & usable drone authentication system accepted to MobiSys'22.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="publications">
+        <h2>Publications</h2>
+        <table class="publication-table">
+          <tbody>
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              ICML 2025
+              </td>
+
+              <td>
+                "StealthInk: A Multi-bit and Stealthy Watermark for Large Language Models"<br>
+                Ya Jiang, <b>Chuxiong Wu</b>, Massieh Kordi Boroujeny, Brian Mark, and Kai Zeng.<br> 
+                <em>Forty-Second International Conference on Machine Learning (ICML)</em>, 2025.<br>
+                <!-- Acceptance Rate: 417/2276 = 18.3% <br> -->
+                >> <a href="papers/2025_ICML_StealthInk.pdf">[PDF]</a> 
+              </td>
+            </tr>
+
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              Security 2024
+              </td>
+
+              <td>
+                "<em>Do You See How I Pose?</em> Using Poses as an Implicit Authentication Factor for QR Code Payment."<br>
+                <b>Chuxiong Wu</b>, and Qiang Zeng.<br> 
+                <em>The 33rd USENIX Security Symposium (USENIX Security)</em>, pp. 4571-4588, 2024.<br>
+                Acceptance Rate: 417/2276 = 18.3% <br>
+                >> <a href="papers/2024-Security-pQRAuth.pdf">[PDF]</a> 
+              </td>
+            </tr>
+
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              TMC 2024
+              </td>
+          
+              <td>
+                "Turning Noises to Fingerprint-Free 'Credentials': Secure and Usable Drone Authentication."<br>
+                <b>Chuxiong Wu</b>, and Qiang Zeng. <br> 
+                <em>IEEE Transactions on Mobile Computing (TMC)</em>, pp. 1-14, 2024.<br>
+                >> <a href="papers/2024-TMC-H2Auth.pdf">[PDF]</a>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              Security 2023
+              </td>
+
+              <td>
+                "<em>Can a Deep Learning Model for One Architecture Be Used for Others?</em> Retargeted-Architecture Binary Code Analysis."<br>
+                Junzhe Wang, Matthew Sharp, <b>Chuxiong Wu</b>, Qiang Zeng, and Lannan Luo.<br> 
+                <em>The 32nd USENIX Security Symposium (USENIX Security)</em>, pp. 7339-7356, 2023.<br>
+                Acceptance Rate: 422/1444 = 29.2% <br>
+                >> <a href="papers/2023-Security-Retargeted.pdf">[PDF]</a> 
+              </td>
+            </tr>
+
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+                UbiComp 2022
+              </td>
+
+              <td>
+                "<em>'Use It—No Need to Shake It!'</em> Accurate Implicit Authentication for Everyday Objects with Smart Sensing."<br>
+                <b>Chuxiong Wu</b>&#42, Xiaopeng Li&#42, Fei Zuo, Lannan Luo, Xiaojiang Du, Jia Di, and Qiang Zeng.<br>
+                <em>Interactive, Mobile, Wearable and Ubiquitous Technologies, Issue 3, Vol. 5 (UbiComp)</em>, pp. 1-25, 2022. (&#42 Co-first Authors) <br>
+                >> <a href="papers/2022-UbiComp-MoMatch.pdf">[PDF]</a> 
+              </td>
+            </tr>
+            
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              MobiCom 2022
+              </td>
+                      
+              <td>
+                "Authentication for Drone Delivery Through a Novel Way of Using Face Biometrics."<br>
+                Jonathan Sharp, <b>Chuxiong Wu</b>, and Qiang Zeng.<br>
+                <em>The 28th Annual International Conference On
+                Mobile Computing And Networking (MobiCom)</em>, pp. 609-622, 2022.<br>
+                Acceptance Rate: 56/314 = 17.8% <br>
+                >> <a href="papers/2022-MobiCom-Smile2Auth.pdf">[PDF]</a> 
+              </td>
+            </tr>
+
+            <tr>
+              <td class="confyear" valign="top" nowrap>
+              MobiSys 2022
+              </td> 
+
+              <td>
+                "G2Auth: Secure Mutual Authentication for Drone Delivery Without Special User-Side Hardware."<br>
+                <b>Chuxiong Wu</b>, Xiaopeng Li, Lannan Luo, and Qiang Zeng.<br>
+                <em>The 20th ACM International Conference on Mobile Systems, Applications, and
+          Services (MobiSys)</em>, pp. 84-98, 2022.<br>
+                Acceptance Rate: 38/176 = 21.6% <br>
+                >> <a href="papers/2022-MobiSys-G2Auth.pdf">[PDF]</a> 
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </section> 
+
+      <!-- Teaching -->
+      <section id="teaching">
+        <h2>Teaching</h2>
+
+        <!-- Instructor block -->
+        <div class="teaching-block">
+          <h3>Instructor</h3>
+          <div class="university">Southern Illinois University</div>
+          <div class="course">
+            CTEC 440: Software Security
+            <ul class="terms">
+              <li>Fall 2025</li>
+              <!-- Add more like <li>Spring 2026</li> in the future -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Teaching Assistant block -->
+        <div class="teaching-block">
+          <h3>Teaching Assistant</h3>
+
+          <div class="university">George Mason University</div>
+          <div class="course">
+            CS 471: Operating Systems
+            <ul class="terms">
+              <li>Spring 2023</li>
+            </ul>
+          </div>
+
+          <div class="university">University of South Carolina</div>
+          <div class="course">
+            CSCE 145: Algorithmic Design I
+            <ul class="terms">
+              <li>Fall 2019</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2>Services</h2>
+
+        <!-- Conference Reviewer -->
+        <div class="service-block">
+          <h3>Conference Reviewer</h3>
+          <ul class="service-list cols-2">
+            <li>Northern Lights Deep Learning Conference (NLDL) - 2026</li>
+            <li>International Conference on Machine Learning (ICML) - 2025</li>
+            <li>International Conference on Learning Representations (ICLR) — 2025</li>
+            <li>International Conference on Artificial Intelligence and Statistics (AISTATS) — 2025, 2026</li>
+            <li>Conference on Neural Information Processing Systems (NeurIPS) — 2024, 2025</li>
+            <li>AI for Time Series Analysis: Theory, Algorithms, and Applications (SDM 2025) - 2025</li>
+            <li>International AAAI Conference on Web and Social Media (ICWSM) - 2025</li>
+            <li>The Undergraduate and Master's Consortium at KDD (KDD-UMC) - 2025</li>
+            <li>International Conference on Artificial Intelligence, Computer, Data Sciences and Applications (ACDSA) - 2025</li>
+            <li>IEEE/IFIP International Conference on Dependable Systems and Networks (DSN) — 2024</li>
+            <li>IEEE International Symposium on Mixed and Augmented Reality (ISMAR) — 2024</li>
+            <li>International Conference on Internet of Things and Intelligent Information Processing — 2024</li>
+            <li>The Undergraduate Consortium at KDD (KDD-UC) — 2023</li>
+            <li>IEEE International Conference on Mobile Ad-Hoc and Sensor Systems (MASS) — 2021</li>
+          </ul>
+        </div>
+
+        <!-- Journal Reviewer -->
+        <div class="service-block">
+          <h3>Journal Reviewer</h3>
+          <ul class="service-list cols-2">
+            <li>IEEE Transactions on Dependable and Secure Computing (TDSC) — 2025</li>
+            <li>ACM Transactions on Computing Education — 2025</li>
+            <li>IEEE Internet Computing (IC) — 2025</li>
+            <li>CCF Transactions on Pervasive Computing and Interaction (TPCI) - 2025</li>
+            <li>Digital Threats: Research and Practice — 2025</li>
+            <li>Computer Standards & Interfaces — 2025</li>
+            <li>Journal of Computer Security — 2025</li>
+            <li>IEEE Transactions on Information Forensics and Security (TIFS) — 2024</li>
+            <li>IEEE Transactions on Cognitive Communications and Networking (TCCN) — 2024</li>
+            <li>IEEE Transactions on Machine Learning in Communications and Networking (TMLCN) — 2024</li>
+            <li>ACM Digital Threats: Research and Practice (DTRAP) — 2024</li>
+            <li>Computers & Security — 2024, 2025</li>
+            <li>Big Data Research — 2024, 2025</li>
+            <li>IEEE Transactions on Mobile Computing (TMC) — 2023</li>
+            <li>ACM Transactions on Internet of Things (TIoT) — 2023</li>
+            <li>Journal of Computer Security (JCS) — 2023</li>
+            <li>Transactions on Emerging Telecommunications Technologies (ETT) — 2023</li>
+            <li>Ad Hoc Networks — 2023</li>
+          </ul>
+        </div>
+
+        <!-- Artifact Evaluation Committee -->
+        <div class="service-block">
+          <h3>Artifact Evaluation Committee Member</h3>
+          <ul class="service-list">
+            <li>ACM Conference on Computer and Communications Security (CCS) — 2024</li>
+          </ul>
+        </div>
+
+        <!-- Volunteer -->
+        <div class="service-block">
+          <h3>Volunteer</h3>
+          <ul class="service-list">
+            <li>Information Security Conference (ISC) — 2024</li>
+          </ul>
+        </div>
+      </section>
+
+
+    </main>
+
+  <footer class="wrap small">
+    © <span id="year"></span> Chuxiong Wu
+  </footer>
+
+  <script>
+    // Mobile menu toggle (no libs)
+    const btn = document.getElementById('menuButton');
+    btn.addEventListener('click', () => {
+      const open = document.body.classList.toggle('nav-open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    // Close menu after clicking a menu link (mobile UX)
+    document.querySelectorAll('.menu a').forEach(a=>{
+      a.addEventListener('click', ()=> {
+        if (document.body.classList.contains('nav-open')) {
+          document.body.classList.remove('nav-open');
+          btn.setAttribute('aria-expanded','false');
+        }
+      });
+    });
+    // Current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    document.getElementById('homeBtn').addEventListener('click', function(e) {
+      e.preventDefault(); // cancel href="#"
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+  </script>
 </body>
 </html>

@@ -130,9 +130,9 @@
     }
 
     .position-block .name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
-      margin: 10px 0 6px;
+      margin: 0px 0 6px;
     }
 
     .position-block .label {
@@ -141,11 +141,15 @@
 
     .position-block .office,
     .position-block .email {
-      margin: 16px 0;
+      margin: 8px 0;
       font-weight: 400;       /* Reset normal text */
     }
 
-
+    .pronunciation {
+      font-size: 14px;
+      color: var(--grey);   /* softer color so it doesn’t dominate */
+      margin-top: 4px;
+    }
 
 
     /* === Main sections === */
@@ -352,6 +356,9 @@
           <img src="img/photo.jpg" alt="Portrait of Chuxiong Wu" class="photo" />
           <div class="position-block">
             <p class="name">Chuxiong Wu, Ph.D.</p>
+            <p class="pronunciation"><b>Pronounced:</b><br> "Choo-shyong Woo"
+            <button onclick="document.getElementById('nameAudio').play()" aria-label="Play pronunciation">🔊</button>
+            <audio id="nameAudio" src="audio/chuxiong_wu.mp3"></audio></p>
             <div class="position">
               <div class="title">Assistant Professor</div>
               <div>School of Computing</div>
